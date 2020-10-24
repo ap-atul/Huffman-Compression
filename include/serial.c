@@ -18,8 +18,8 @@ void sortHuffmanTreeNodes(int a, int distinctCharacterCount, int combinedHuffman
             // perform swapping
             if(huffmanTreeNode[j].frequency > huffmanTreeNode[j + 1].frequency){
                 struct huffmanNode tempNode = huffmanTreeNode[j];
-                huffmanTreeNode[b] = huffmanTreeNode[b + 1];
-                huffmanTreeNode[b + 1] = tempNode;
+                huffmanTreeNode[j] = huffmanTreeNode[j + 1];
+                huffmanTreeNode[j + 1] = tempNode;
             }
 
         }

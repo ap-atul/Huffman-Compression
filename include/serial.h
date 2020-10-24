@@ -7,7 +7,7 @@
 struct huffmanDictionary{
     unsigned char bitSequence[255];
     unsigned char bitSequenceLength;
-}
+};
 
 // struct for node
 struct huffmanNode{
@@ -15,7 +15,7 @@ struct huffmanNode{
     unsigned int frequency;  // frequency of the char
     struct huffmanNode * left;  // left sub tree
     struct huffmanNode * right;  // right sub tree
-}
+};
 
 // default configs
 extern struct huffmanDictionary huffmanDictionary[256];
