@@ -8,10 +8,13 @@
 #include <time.h>
 
 #include "../include/serial.h"
+#include "../include/color.h"
 
 struct huffmanDictionary huffmanDictionary[256];
 struct huffmanNode * huffmanNode_head;
 struct huffmanNode huffmanTreeNode[512];
+
+#define DEBUG 1
 
 int main(int argc, char ** argv){
     clock_t start, end;
@@ -103,6 +106,15 @@ int main(int argc, char ** argv){
     outputFile = fopen(argv[2], "wb");
     fwrite(outputData, sizeof(unsigned char), outputFileLength, outputFile);
     fclose(outputFile);
+
+    // printing debug info if debug is on
+    if(DEBUG){
+        printf("\n%sCompressed file length :: %d", COLOR_DEBUG, compressedFileLength);
+        printf("\nOutput file length counter :: %d", outputFileLengthCounter);
+        printf("\nOutput file length :: %d", outputFileLength);
+        printf("\nMerged Huffman Nodes :: %d", mergedHuffmanNodes);
+        printf("\nDistinct character count :: %d", distinctCharacterCount);
+    }
 
     cpuTime = (end - start) * 1000 / CLOCKS_PER_SEC;
     printf("\nTime taken: %d:%d s\n", cpuTime / 1000, cpuTime % 1000);

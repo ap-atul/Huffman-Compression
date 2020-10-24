@@ -8,10 +8,13 @@
 #include <time.h>
 
 #include "../include/serial.h"
+#include "../include/color.h"
 
 struct huffmanDictionary huffmanDictionary[256];
 struct huffmanNode * huffmanNode_head;
 struct huffmanNode huffmanTreeNode[512];
+
+#define DEBUG 1
 
 int main(int argc, char ** argv){
     clock_t start, end;
@@ -55,8 +58,6 @@ int main(int argc, char ** argv){
         }
     }
 
-    printf("\nDistinct Characters :: %d", distinctCharacterCount);
-
     // building the tree
     for(int i = 0; i < distinctCharacterCount - 1; i++){
         mergedHuffmanNodes = 2 * i;
@@ -94,8 +95,6 @@ int main(int argc, char ** argv){
         }
     }
 
-    printf("\nCompressed file length :: %d", compressedFileLength);
-
     if(bitsFilled != 0){
         for(int i = 0; (unsigned char) i < 8 - bitsFilled; i++){
             writeBit = writeBit << 1;
@@ -113,6 +112,14 @@ int main(int argc, char ** argv){
     fwrite(frequency, sizeof(unsigned int), 256, compressedFile);
     fwrite(compressedData, sizeof(unsigned char), compressedFileLength, compressedFile);
     fclose(compressedFile);
+
+    // printing debug info if debug is on
+    if(DEBUG){
+        printf("\n%sCompressed file length :: %d", COLOR_DEBUG, compressedFileLength);
+        printf("\nInput file length :: %d", inputFileLength);
+        printf("\nMerged Huffman Nodes :: %d", mergedHuffmanNodes);
+        printf("\nDistinct character count :: %d", distinctCharacterCount);
+    }
 
     // printing the time taken
 	cpuTime = ((end - start)) * 1000 / CLOCKS_PER_SEC;
