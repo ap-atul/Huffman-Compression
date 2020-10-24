@@ -79,6 +79,7 @@ int main(int argc, char ** argv){
     compressedFileLength = 0;
     for(int i = 0; i < inputFileLength; i++){
         for(int j = 0; j < huffmanDictionary[inputFileData[i]].bitSequenceLength; j++){
+            // root
             if(huffmanDictionary[inputFileData[i]].bitSequence[j] == 0){
                 writeBit = writeBit << 1;
                 bitsFilled += 1;
