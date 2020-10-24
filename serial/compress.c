@@ -55,6 +55,8 @@ int main(int argc, char ** argv){
         }
     }
 
+    printf("\nDistinct Characters :: %d", distinctCharacterCount);
+
     // building the tree
     for(int i = 0; i < distinctCharacterCount - 1; i++){
         mergedHuffmanNodes = 2 * i;
@@ -92,6 +94,8 @@ int main(int argc, char ** argv){
         }
     }
 
+    printf("\nCompressed file length :: %d", compressedFileLength);
+
     if(bitsFilled != 0){
         for(int i = 0; (unsigned char) i < 8 - bitsFilled; i++){
             writeBit = writeBit << 1;
@@ -112,9 +116,11 @@ int main(int argc, char ** argv){
 
     // printing the time taken
 	cpuTime = ((end - start)) * 1000 / CLOCKS_PER_SEC;
-	printf("Time taken: %d:%d s\n", cpuTime / 1000, cpuTime % 1000);
+	printf("\nTime taken: %d:%d s\n", cpuTime / 1000, cpuTime % 1000);
 
 	// clean up
 	free(inputFileData);
 	free(compressedData);
+
+	return 0;
 }
