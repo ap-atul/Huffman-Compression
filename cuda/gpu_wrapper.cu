@@ -8,8 +8,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "parallel.h"
-#include "color.h"
+#include "../include/parallel.h"
+#include "../include/color.h"
 
 #define BLOCK_SIZE 1024
 #define DEBUG 1
