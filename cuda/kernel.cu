@@ -9,8 +9,6 @@
 
 #include "../include/parallel.h"
 
-__constant__ unsigned char device_bitSequenceConstantMemory[256][255];
-
 /*
 * Compression function
 * Single run and no overflow

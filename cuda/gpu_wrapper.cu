@@ -15,7 +15,7 @@
 #define DEBUG 1
 #define NUM_BYTES 10240
 
-__constant__ unsigned char device_bitSequenceConstantMemory[256][255];
+__constant__ unsigned char device_bitSequenceConstMemory[256][255];
 
 /*
 * Main launching function to load the data on the device
@@ -100,7 +100,7 @@ void launchCudaHuffmanCompress(unsigned char * inputFileData,
 
         // constant memory if required
         if(constMemoryFlag == 1){
-            error = cudaMemcpyToSymbol(device_bitSequenceConstantMemory, bitSequenceConstMemory, 265 * 255 * sizeof(unsigned char));
+            error = cudaMemcpyToSymbol(device_bitSequenceConstMemory, bitSequenceConstMemory, 265 * 255 * sizeof(unsigned char));
             if(error != cudaSuccess)
                 printf("\nError Constant :: %s", cudaGetErrorString(error));
         }
