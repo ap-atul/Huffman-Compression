@@ -17,8 +17,8 @@
 struct huffmanNode * huffmanTreeNode_head;
 struct huffmanDictionary huffmanDictionary;
 struct huffmanNode huffmanTreeNode[512];
-unsigned char bitSequenceConstantMemory[256][255];
-unsigned int constantMemoryFlag = 0;
+unsigned char bitSequenceConstMemory[256][255];
+unsigned int constMemoryFlag = 0;
 
 int main(int argc, char ** argv){
     unsigned int distinctCharacterCount, mergedHuffmanNodes, inputFileLength;

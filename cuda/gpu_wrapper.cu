@@ -15,6 +15,8 @@
 #define DEBUG 1
 #define NUM_BYTES 10240
 
+__constant__ unsigned char device_bitSequenceConstMemory[256][255];
+
 /*
 * Main launching function to load the data on the device
 */
