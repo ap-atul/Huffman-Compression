@@ -75,34 +75,34 @@ void launchCudaHuffmanCompress(unsigned char * inputFileData,
         // memory allocation
         error = cudaMalloc((void **) & device_inputFileData, inputFileLength * sizeof(unsigned char));
         if(error != cudaSuccess)
-            printf("\n%sError 1 :: %s", COLOR_ERROR, cudaErrorString(error));
+            printf("\n%sError 1 :: %s", COLOR_ERROR, cudaGetErrorString(error));
 
         error = cudaMalloc((void **) & device_compressedDataOffset, (inputFileLength + 1) * sizeof(unsigned int));
         if(error != cudaSuccess)
-            printf("\nError 2 :: %s", cudaErrorString(error));
+            printf("\nError 2 :: %s", cudaGetErrorString(error));
 
         error = cudaMalloc((void **) & device_huffmanDictionary, sizeof(huffmanDictionary));
         if(error != cudaSuccess)
-            printf("\nError 3 :: %s", cudaErrorString(error));
+            printf("\nError 3 :: %s", cudaGetErrorString(error));
 
         // memory copy to device
         error = cudaMemcpy(device_inputFileData, inputFileData, inputFileLength * sizeof(unsigned char), cudaMemcpyHostToDevice);
         if(error != cudaSuccess)
-            printf("\nError 4 :: %s", cudaErrorString(error));
+            printf("\nError 4 :: %s", cudaGetErrorString(error));
 
         error = cudaMemcpy(device_compressedDataOffset, compressedDataOffset, (inputFileLength + 1) * sizeof(unsigned int), cudaMemcpyHostToDevice);
         if(error != cudaSuccess)
-            printf("\nError 5 :: %s", cudaErrorString(error));
+            printf("\nError 5 :: %s", cudaGetErrorString(error));
 
         error = cudaMemcpy(device_huffmanDictionary, & huffmanDictionary, sizeof(huffmanDictionary), cudaMemcpyHostToDevice);
         if(error != cudaSuccess)
-            printf("\nError 6 :: %s", cudaErrorString(error));
+            printf("\nError 6 :: %s", cudaGetErrorString(error));
 
         // constant memory if required
         if(constMemoryFlag == 1){
             error = cudaMemcpyToSymbol(device_bitSequenceConstantMemory, bitSequenceConstMemory, 265 * 255 * sizeof(unsigned char));
             if(error != cudaSuccess)
-                printf("\nError Constant :: %s", cudaErrorString(error));
+                printf("\nError Constant :: %s", cudaGetErrorString(error));
         }
 
     }
@@ -114,12 +114,12 @@ void launchCudaHuffmanCompress(unsigned char * inputFileData,
         if(integerOverflowFlag == 0){
             error = cudaMalloc((void **) & device_byteCompressedData, (compressedDataOffset[inputFileLength]) * sizeof(unsigned char));
 			if(error != cudaSuccess)
-                printf("\nError 7 :: %s", cudaErrorString(error));
+                printf("\nError 7 :: %s", cudaGetErrorString(error));
 
 			// initialize device_compressedData
 			error = cudaMemset(device_byteCompressedData, 0, compressedDataOffset[inputFileLength] * sizeof(unsigned char));
 			if(error != cudaSuccess)
-                printf("\nError 8 :: %s", cudaErrorString(error));
+                printf("\nError 8 :: %s", cudaGetErrorString(error));
 
 			// debug
 			if(1){
@@ -131,12 +131,12 @@ void launchCudaHuffmanCompress(unsigned char * inputFileData,
 			compress<<<1, BLOCK_SIZE>>>(device_inputFileData, device_compressedDataOffset, device_huffmanDictionary, device_byteCompressedData, inputFileLength, constMemoryFlag);
 			cudaError_t error_kernel = cudaGetLastError();
 			if(error_kernel != cudaSuccess)
-                printf("\nError Kernel 1 :: %s", cudaErrorString(error));
+                printf("\nError Kernel 1 :: %s", cudaGetErrorString(error));
 
 			// copy compressed data from GPU to CPU memory
 			error = cudaMemcpy(inputFileData, device_inputFileData, ((compressedDataOffset[inputFileLength] / 8)) * sizeof(unsigned char), cudaMemcpyDeviceToHost);
 			if(error != cudaSuccess)
-                printf("\nError 9 :: %s", cudaErrorString(error));
+                printf("\nError 9 :: %s", cudaGetErrorString(error));
 
 			// free allocated memory
 			cudaFree(device_inputFileData);
