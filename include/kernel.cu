@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../include/parallel.h"
+#include "parallel.h"
 
 /*
 * Compression function
