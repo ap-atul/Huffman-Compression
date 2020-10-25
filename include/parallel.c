@@ -35,7 +35,7 @@ void buildHuffmanTreeNodes(int i, int distinctCharacterCount, int combinedHuffma
     huffmanTreeNode[distinctCharacterCount + i].frequency = huffmanTreeNode[combinedHuffmanNodes].frequency + huffmanTreeNode[combinedHuffmanNodes + 1].frequency;
     huffmanTreeNode[distinctCharacterCount + i].left = & huffmanTreeNode[combinedHuffmanNodes];
     huffmanTreeNode[distinctCharacterCount + i].right = & huffmanTreeNode[combinedHuffmanNodes + 1];
-    huffmanNode_head = & (huffmanTreeNode[distinctCharacterCount + i]);
+    huffmanTreeNode_head = & (huffmanTreeNode[distinctCharacterCount + i]);
 }
 
 /*
@@ -135,7 +135,7 @@ void createDataOffsetArray(unsigned int * compressedDataOffset,
                            long unsigned int memoryRequired)
 {
     int j = 0;
-    gpuMemoryOverflowIndex[0] = 0;
+    gpuMemoryOverflow[0] = 0;
     gpuBitPaddingFlag[0] = 0;
     compressedDataOffset[0] = 0;
 
@@ -143,8 +143,8 @@ void createDataOffsetArray(unsigned int * compressedDataOffset,
         compressedDataOffset[i + 1] = huffmanDictionary.bitSequenceLength[inputFileData[i]] + compressedDataOffset[i];
 
         if(compressedDataOffset[i + 1] > memoryRequired){
-            gpuMemoryOverflowIndex[j * 2 + 1] = i;
-            gpuMemoryOverflowIndex[j * 2 + 2] = i + 1;
+            gpuMemoryOverflow[j * 2 + 1] = i;
+            gpuMemoryOverflow[j * 2 + 2] = i + 1;
 
             if(compressedDataOffset[i] % 8 != 0){
                 gpuBitPaddingFlag[j + 1] = 1;
@@ -162,7 +162,7 @@ void createDataOffsetArray(unsigned int * compressedDataOffset,
         compressedDataOffset[inputFileLength] = compressedDataOffset[inputFileLength] + (8 - (compressedDataOffset[inputFileLength] % 8));
     }
 
-    gpuMemoryOverflowIndex[j * 2 + 1] = inputFileLength;
+    gpuMemoryOverflow[j * 2 + 1] = inputFileLength;
 }
 
 /*

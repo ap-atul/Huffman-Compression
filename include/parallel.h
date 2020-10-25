@@ -19,7 +19,7 @@ struct huffmanNode{
 
 // configs
 extern struct huffmanNode * huffmanTreeNode_head;
-extern struct huffmanNode huffmanTreeNodes[512];
+extern struct huffmanNode huffmanTreeNode[512];
 extern struct huffmanDictionary huffmanDictionary;
 
 // constants
@@ -54,6 +54,7 @@ __global__ void compress(unsigned char * device_inputFileData,
                          unsigned int constMemoryFlag,
                          unsigned int overflowPosition);
 
+// 3. Multiple run, no overflow
 __global__ void compress(unsigned char * device_inputFileData,
                          unsigned int * device_compressedDataOffset,
                          struct huffmanDictionary * device_huffmanDictionary,
@@ -62,6 +63,7 @@ __global__ void compress(unsigned char * device_inputFileData,
                          unsigned int constMemoryFlag,
                          unsigned int device_upperPosition);
 
+// 4. Multiple run with overflow
 __global__ void compress(unsigned char * device_inputFileData,
                          unsigned int * device_compressedDataOffset,
                          struct huffmanDictionary * device_huffmanDictionary,
