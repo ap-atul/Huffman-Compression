@@ -15,6 +15,8 @@
 #define DEBUG 1
 #define NUM_BYTES 10240
 
+unsigned char bitSequenceConstMemory[256][255];
+unsigned int constMemoryFlag;
 __constant__ unsigned char device_bitSequenceConstMemory[256][255];
 
 /*

@@ -12,7 +12,7 @@
 * Sorting the nodes based on the frequency
 * The man frequency is represented by the distinct char count
 */
-void sortHuffmanTreeNodes(int a, int distinctCharacterCount, int combinedHuffmanNodes){
+void sortHuffmanTree(int a, int distinctCharacterCount, int combinedHuffmanNodes){
     for(int i = combinedHuffmanNodes; i < distinctCharacterCount - 1 + a; i++){
         for(int j = combinedHuffmanNodes; j < distinctCharacterCount - 1 + a; j++){
 
@@ -31,7 +31,7 @@ void sortHuffmanTreeNodes(int a, int distinctCharacterCount, int combinedHuffman
 * Build the tree from the sorted results
 * The tree here is the min heap
 */
-void buildHuffmanTreeNodes(int i, int distinctCharacterCount, int combinedHuffmanNodes){
+void buildHuffmanTree(int i, int distinctCharacterCount, int combinedHuffmanNodes){
     huffmanTreeNode[distinctCharacterCount + i].frequency = huffmanTreeNode[combinedHuffmanNodes].frequency + huffmanTreeNode[combinedHuffmanNodes + 1].frequency;
     huffmanTreeNode[distinctCharacterCount + i].left = & huffmanTreeNode[combinedHuffmanNodes];
     huffmanTreeNode[distinctCharacterCount + i].right = & huffmanTreeNode[combinedHuffmanNodes + 1];
