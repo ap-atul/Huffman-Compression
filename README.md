@@ -1,5 +1,5 @@
 # Huffman-Compression
-Huffman encoding and decoding with simple Serial and Parallel implementations for CPU and GPU
+Huffman encoding and decoding with simple Serial and Parallel implementations for CPU and GPU (cuda)
 
 
 ## Algorithm
@@ -42,6 +42,19 @@ $ make -B serial
 $ ./bin/compress input.txt input.compressed
 ```
 4. Or decompression
+```console
+$ ./bin/decompress input.compressed input_decompressed.txt
+```
+
+* For parallel with cuda
+```console
+$ make -B cuda
+```
+* Compression
+```console
+$ ./bin/compress_cuda input.txt input.compressed
+```
+4. Decompression (serial)
 ```console
 $ ./bin/decompress input.compressed input_decompressed.txt
 ```

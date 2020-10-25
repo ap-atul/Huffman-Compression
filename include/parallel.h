@@ -108,7 +108,7 @@ void launchCudaHuffmanCompress(unsigned char * inputFileData,
                                unsigned int * compressedDataOffset,
                                unsigned int inputFileLength,
                                int numberOfKernels,
-                               unsigned int integerOverflowIndex,
+                               unsigned int integerOverflowFlag,
                                long unsigned int memoryRequired);
 
 
