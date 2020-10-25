@@ -116,7 +116,7 @@ void launchCudaHuffmanCompress(unsigned char * inputFileData,
 			if(error != cudaSuccess)
                 printf("\nError 7 :: %s", cudaGetErrorString(error));
 
-			// initialize device_compressedData
+			// initialize device_byteCompressedData
 			error = cudaMemset(device_byteCompressedData, 0, compressedDataOffset[inputFileLength] * sizeof(unsigned char));
 			if(error != cudaSuccess)
                 printf("\nError 8 :: %s", cudaGetErrorString(error));
@@ -142,7 +142,7 @@ void launchCudaHuffmanCompress(unsigned char * inputFileData,
 			cudaFree(device_inputFileData);
 			cudaFree(device_compressedDataOffset);
 			cudaFree(device_huffmanDictionary);
-			cudaFree(device_compressedData);
+			cudaFree(device_byteCompressedData);
 		}
 
 		// with overflow
@@ -266,7 +266,7 @@ void launchCudaHuffmanCompress(unsigned char * inputFileData,
 			cudaFree(device_inputFileData);
 			cudaFree(device_compressedDataOffset);
 			cudaFree(device_huffmanDictionary);
-			cudaFree(device_compressedData);
+			cudaFree(device_byteCompressedData);
 		}
 
 		else{
