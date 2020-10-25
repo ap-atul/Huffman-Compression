@@ -1,6 +1,7 @@
 /*
 * Parallel implementation for the Huffman tree
 * Used for Parallel implementation over the GPU
+* nvcc supported file, won't compile with gcc
 */
 
 // structure for dictionary
@@ -35,6 +36,7 @@ void buildHuffmanDictionary(struct huffmanNode * root, unsigned char * bitSequen
 int wrapperGpu(char ** file, unsigned char * inputFileData, int inputFileLength);
 
 // device functions
+// 1. Single run, no overflow
 __global__ void compress(unsigned char * device_inputFileData,
                          unsigned int * device_compressedDataOffset,
                          struct huffmanDictionary * device_huffmanDictionary,
@@ -42,6 +44,7 @@ __global__ void compress(unsigned char * device_inputFileData,
                          unsigned int device_inputFileLength,
                          unsigned int constMemoryFlag);
 
+// 2. Single run, with overflow
 __global__ void compress(unsigned char * device_inputFileData,
                          unsigned int * device_compressedDataOffset,
                          struct huffmanDictionary * device_huffmanDictionary,

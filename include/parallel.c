@@ -1,5 +1,6 @@
 /*
 * Parallel function implementations
+* nvcc supported file won't compile with gcc
 */
 
 #include <stdio.h>
