@@ -40,7 +40,7 @@ __global__ void compress(unsigned char * device_inputFileData,
             for(int k = 0; k < table.bitSequenceLength[device_inputFileData[i]]; k++){
 
                 if(k < 191){
-                    device_byteCompressedData[device_compressedDataOffset[i] + k] = table.bitSequenceLength[device_inputFileData[i]][k];
+                    device_byteCompressedData[device_compressedDataOffset[i] + k] = table.bitSequence[device_inputFileData[i]][k];
                 } else {
                     device_byteCompressedData[device_compressedDataOffset[i] + k] = device_bitSequenceConstMemory[device_inputFileData[i]][k];
                 }
@@ -84,12 +84,12 @@ __global__ void compress(unsigned char * device_inputFileData,
     if(constMemoryFlag == 0){
         for(int i = pos; i < overflowPosition; i += blockDim.x){
             for(int k = 0; k < table.bitSequenceLength[device_inputFileData[i]]; k++){
-                device_byteCompressedData[device_compressedDataOffset[i] + k] = table.bitSequenceLength[device_inputFileData[i]][k];
+                device_byteCompressedData[device_compressedDataOffset[i] + k] = table.bitSequence[device_inputFileData[i]][k];
             }
         }
         for(int i = overflowPosition + pos; i < inputFileLength - 1; i += blockDim.x){
             for(int k = 0; k < table.bitSequenceLength[device_inputFileData[i + 1]]; k++){
-                device_tempOverflow[device_compressedDataOffset[i + 1] + k] = table.bitSequenceLength[device_inputFileData[i + 1]][k];
+                device_tempOverflow[device_compressedDataOffset[i + 1] + k] = table.bitSequence[device_inputFileData[i + 1]][k];
             }
         }
         if(pos == 0){
@@ -104,7 +104,7 @@ __global__ void compress(unsigned char * device_inputFileData,
             for(int k = 0; k < table.bitSequenceLength[device_inputFileData[i]]; k++){
 
                 if(k < 191){
-                    device_byteCompressedData[device_compressedDataOffset[i] + k] = table.bitSequenceLength[device_inputFileData[i]][k];
+                    device_byteCompressedData[device_compressedDataOffset[i] + k] = table.bitSequence[device_inputFileData[i]][k];
                 } else {
                     device_byteCompressedData[device_compressedDataOffset[i] + k] = device_bitSequenceConstMemory[device_inputFileData[i]][k];
                 }
@@ -114,7 +114,7 @@ __global__ void compress(unsigned char * device_inputFileData,
             for(int k = 0; k < table.bitSequenceLength[device_inputFileData[i + 1]]; k++){
 
                 if(k < 191){
-                    device_tempOverflow[device_compressedDataOffset[i + 1] + k] = table.bitSequenceLength[device_inputFileData[i + 1]][k];
+                    device_tempOverflow[device_compressedDataOffset[i + 1] + k] = table.bitSequence[device_inputFileData[i + 1]][k];
                 } else {
                     device_tempOverflow[device_compressedDataOffset[i + 1] + k] = device_bitSequenceConstMemory[device_inputFileData[i + 1]][k];
                 }
@@ -171,7 +171,7 @@ __global__ void compress(unsigned char * device_inputFileData,
     if(constMemoryFlag == 0){
         for(int i = pos + device_lowerPosition; i < device_upperPosition; i += blockDim.x){
             for(int k = 0; k < table.bitSequenceLength[device_inputFileData[i]]; k++){
-                device_byteCompressedData[device_compressedDataOffset[i] + k] = table.bitSequenceLength[device_inputFileData[i]][k];
+                device_byteCompressedData[device_compressedDataOffset[i] + k] = table.bitSequence[device_inputFileData[i]][k];
             }
         }
         if(pos == 0 && device_lowerPosition != 0){
@@ -186,7 +186,7 @@ __global__ void compress(unsigned char * device_inputFileData,
             for(int k = 0; k < table.bitSequenceLength[device_inputFileData[i]]; k++){
 
                 if(k < 191){
-                    device_byteCompressedData[device_compressedDataOffset[i] + k] = table.bitSequenceLength[device_inputFileData[i]][k];
+                    device_byteCompressedData[device_compressedDataOffset[i] + k] = table.bitSequence[device_inputFileData[i]][k];
                 } else {
                     device_byteCompressedData[device_compressedDataOffset[i] + k] = device_bitSequenceConstMemory[device_inputFileData[i]][k];
                 }
@@ -234,12 +234,12 @@ __global__ void compress(unsigned char * device_inputFileData,
     if(constMemoryFlag == 0){
         for(int i = pos + device_lowerPosition; i < overflowPosition; i += blockDim.x){
             for(int k = 0; k < table.bitSequenceLength[device_inputFileData[i]]; k++){
-                device_byteCompressedData[device_compressedDataOffset[i] + k] = table.bitSequenceLength[device_inputFileData[i]][k];
+                device_byteCompressedData[device_compressedDataOffset[i] + k] = table.bitSequence[device_inputFileData[i]][k];
             }
         }
         for(int i = pos + overflowPosition; i < device_upperPosition - 1; i += blockDim.x){
             for(int k = 0; k < table.bitSequenceLength[device_inputFileData[i + 1]]; k++){
-                device_tempOverflow[device_compressedDataOffset[i + 1] + k] = table.bitSequenceLength[device_inputFileData[i + 1]][k];
+                device_tempOverflow[device_compressedDataOffset[i + 1] + k] = table.bitSequence[device_inputFileData[i + 1]][k];
             }
         }
 
@@ -259,7 +259,7 @@ __global__ void compress(unsigned char * device_inputFileData,
             for(int k = 0; k < table.bitSequenceLength[device_inputFileData[i]]; k++){
 
                 if(k < 191){
-                    device_byteCompressedData[device_compressedDataOffset[i] + k] = table.bitSequenceLength[device_inputFileData[i]][k];
+                    device_byteCompressedData[device_compressedDataOffset[i] + k] = table.bitSequence[device_inputFileData[i]][k];
                 } else {
                     device_byteCompressedData[device_compressedDataOffset[i] + k] = device_bitSequenceConstMemory[device_inputFileData[i]][k];
                 }
@@ -269,7 +269,7 @@ __global__ void compress(unsigned char * device_inputFileData,
             for(int k = 0; k < table.bitSequenceLength[device_inputFileData[i + 1]]; k++){
 
                 if(k < 191){
-                    device_tempOverflow[device_compressedDataOffset[i] + k] = table.bitSequenceLength[device_inputFileData[i]][k];
+                    device_tempOverflow[device_compressedDataOffset[i] + k] = table.bitSequence[device_inputFileData[i]][k];
                 } else {
                     device_tempOverflow[device_compressedDataOffset[i] + k] = device_bitSequenceConstMemory[device_inputFileData[i]][k];
                 }
