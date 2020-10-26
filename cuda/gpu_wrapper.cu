@@ -39,34 +39,34 @@ void launchCudaHuffmanCompress(unsigned char * inputFileData,
 	// generate offset
 	if(integerOverflowFlag == 0){
 		// only one time run of kernel
-		if(numKernelRuns == 1){
+		if(numberOfKernels == 1){
 			createDataOffsetArray(compressedDataOffset, inputFileData, inputFileLength);
 		}
 
 		// multiple run of kernel due to larger file or smaller gpu memory
 		else{
-			gpuBitPaddingFlag = (unsigned int *)calloc(numKernelRuns, sizeof(unsigned int));
-			gpuMemoryOverflowIndex = (unsigned int *)calloc(numKernelRuns * 2, sizeof(unsigned int));
-			createDataOffsetArray(compressedDataOffset, inputFileData, inputFileLength, gpuMemoryOverflowIndex, gpuBitPaddingFlag, mem_req);
+			gpuBitPaddingFlag = (unsigned int *)calloc(numberOfKernels, sizeof(unsigned int));
+			gpuMemoryOverflowIndex = (unsigned int *)calloc(numberOfKernels * 2, sizeof(unsigned int));
+			createDataOffsetArray(compressedDataOffset, inputFileData, inputFileLength, gpuMemoryOverflowIndex, gpuBitPaddingFlag, memoryRequired);
 		}
 	}
 
 	// when there is integer over flow
 	else{
 		// overflow occurs and single run
-		if(numKernelRuns == 1){
-			bitPaddingFlag = (unsigned int *)calloc(numKernelRuns, sizeof(unsigned int));
-			integerOverflowIndex = (unsigned int *)calloc(numKernelRuns * 2, sizeof(unsigned int));
+		if(numberOfKernels == 1){
+			bitPaddingFlag = (unsigned int *)calloc(numberOfKernels, sizeof(unsigned int));
+			integerOverflowIndex = (unsigned int *)calloc(numberOfKernels * 2, sizeof(unsigned int));
 			createDataOffsetArray(compressedDataOffset, inputFileData, inputFileLength, integerOverflowIndex, bitPaddingFlag, 10240);
 		}
 
 		// overflow occurs and multiple run
 		else{
-			gpuBitPaddingFlag = (unsigned int *)calloc(numKernelRuns, sizeof(unsigned int));
-			bitPaddingFlag = (unsigned int *)calloc(numKernelRuns, sizeof(unsigned int));
-			integerOverflowIndex = (unsigned int *)calloc(numKernelRuns * 2, sizeof(unsigned int));
-			gpuMemoryOverflowIndex = (unsigned int *)calloc(numKernelRuns * 2, sizeof(unsigned int));
-			createDataOffsetArray(compressedDataOffset, inputFileData, inputFileLength, integerOverflowIndex, bitPaddingFlag, gpuMemoryOverflowIndex, gpuBitPaddingFlag, 10240, mem_req);
+			gpuBitPaddingFlag = (unsigned int *)calloc(numberOfKernels, sizeof(unsigned int));
+			bitPaddingFlag = (unsigned int *)calloc(numberOfKernels, sizeof(unsigned int));
+			integerOverflowIndex = (unsigned int *)calloc(numberOfKernels * 2, sizeof(unsigned int));
+			gpuMemoryOverflowIndex = (unsigned int *)calloc(numberOfKernels * 2, sizeof(unsigned int));
+			createDataOffsetArray(compressedDataOffset, inputFileData, inputFileLength, integerOverflowIndex, bitPaddingFlag, gpuMemoryOverflowIndex, gpuBitPaddingFlag, 10240, memoryRequired);
 		}
 	}
 
@@ -97,7 +97,7 @@ void launchCudaHuffmanCompress(unsigned char * inputFileData,
 
 		// copy constant memory if required for dictionary
 		if(constMemoryFlag == 1){
-			error = cudaMemcpyToSymbol (d_bitSequenceConstMemory, bitSequenceConstMemory, 256 * 255 * sizeof(unsigned char));
+			error = cudaMemcpyToSymbol (device_bitSequenceConstMemory, bitSequenceConstMemory, 256 * 255 * sizeof(unsigned char));
 			if (error!= cudaSuccess)
 				printf("erro_const: %s\n", cudaGetErrorString(error));
 		}
@@ -105,7 +105,7 @@ void launchCudaHuffmanCompress(unsigned char * inputFileData,
 
 
 	// memory copy of offset data
-	if(numKernelRuns == 1){
+	if(numberOfKernels == 1){
 		// no overflow
 		if(integerOverflowFlag == 0){
 			error = cudaMalloc((void **)&d_byteCompressedData, (compressedDataOffset[inputFileLength]) * sizeof(unsigned char));
@@ -124,7 +124,7 @@ void launchCudaHuffmanCompress(unsigned char * inputFileData,
 			}
 
 			// run kernel
-			compress<<<1, block_size>>>(d_inputFileData, d_compressedDataOffset, d_huffmanDictionary, d_byteCompressedData, inputFileLength, constMemoryFlag);
+			compress<<<1, BLOCK_SIZE>>>(d_inputFileData, d_compressedDataOffset, d_huffmanDictionary, d_byteCompressedData, inputFileLength, constMemoryFlag);
 			cudaError_t error_kernel = cudaGetLastError();
 			if (error_kernel != cudaSuccess)
 				printf("erro_final: %s\n", cudaGetErrorString(error_kernel));
@@ -169,7 +169,7 @@ void launchCudaHuffmanCompress(unsigned char * inputFileData,
 			}
 
 			// launch kernel
-			compress<<<1, block_size>>>(d_inputFileData, d_compressedDataOffset, d_huffmanDictionary, d_byteCompressedData, d_byteCompressedDataOverflow, inputFileLength, constMemoryFlag, integerOverflowIndex[0]);
+			compress<<<1, BLOCK_SIZE>>>(d_inputFileData, d_compressedDataOffset, d_huffmanDictionary, d_byteCompressedData, d_byteCompressedDataOverflow, inputFileLength, constMemoryFlag, integerOverflowIndex[0]);
 
 			// check status
 			cudaError_t error_kernel = cudaGetLastError();
@@ -219,13 +219,13 @@ void launchCudaHuffmanCompress(unsigned char * inputFileData,
 			}
 
 			unsigned int pos = 0;
-			for(i = 0; i < numKernelRuns; i++){
+			for(i = 0; i < numberOfKernels; i++){
 				// initialize d_byteCompressedData
 				error = cudaMemset(d_byteCompressedData, 0, compressedDataOffset[gpuMemoryOverflowIndex[1]] * sizeof(unsigned char));
 				if (error!= cudaSuccess)
 						printf("erro_8: %s\n", cudaGetErrorString(error));
 
-				compress<<<1, block_size>>>(d_inputFileData, d_compressedDataOffset, d_huffmanDictionary, d_byteCompressedData, gpuMemoryOverflowIndex[i * 2], constMemoryFlag, gpuMemoryOverflowIndex[i * 2 + 1]);
+				compress<<<1, BLOCK_SIZE>>>(d_inputFileData, d_compressedDataOffset, d_huffmanDictionary, d_byteCompressedData, gpuMemoryOverflowIndex[i * 2], constMemoryFlag, gpuMemoryOverflowIndex[i * 2 + 1]);
 				cudaError_t error_kernel = cudaGetLastError();
 				if (error_kernel != cudaSuccess)
 					printf("erro_final: %s\n", cudaGetErrorString(error_kernel));
@@ -272,7 +272,7 @@ void launchCudaHuffmanCompress(unsigned char * inputFileData,
 			}
 
 			unsigned int pos = 0;
-			for(i = 0; i < numKernelRuns; i++){
+			for(i = 0; i < numberOfKernels; i++){
 				if(integerOverflowIndex[i] != 0){
 					// initialize d_byteCompressedData
 					error = cudaMemset(d_byteCompressedData, 0, compressedDataOffset[integerOverflowIndex[0]] * sizeof(unsigned char));
@@ -282,7 +282,7 @@ void launchCudaHuffmanCompress(unsigned char * inputFileData,
 					if (error!= cudaSuccess)
 							printf("erro_10: %s\n", cudaGetErrorString(error));
 
-					compress<<<1, block_size>>>(d_inputFileData, d_compressedDataOffset, d_huffmanDictionary, d_byteCompressedData, d_byteCompressedDataOverflow, gpuMemoryOverflowIndex[i * 2], constMemoryFlag, gpuMemoryOverflowIndex[i * 2 + 1], integerOverflowIndex[i]);
+					compress<<<1, BLOCK_SIZE>>>(d_inputFileData, d_compressedDataOffset, d_huffmanDictionary, d_byteCompressedData, d_byteCompressedDataOverflow, gpuMemoryOverflowIndex[i * 2], constMemoryFlag, gpuMemoryOverflowIndex[i * 2 + 1], integerOverflowIndex[i]);
 					cudaError_t error_kernel = cudaGetLastError();
 					if (error_kernel != cudaSuccess)
 						printf("erro_final: %s\n", cudaGetErrorString(error_kernel));
@@ -343,7 +343,7 @@ void launchCudaHuffmanCompress(unsigned char * inputFileData,
 					if (error!= cudaSuccess)
 							printf("erro_8: %s\n", cudaGetErrorString(error));
 
-					compress<<<1, block_size>>>(d_inputFileData, d_compressedDataOffset, d_huffmanDictionary, d_byteCompressedData, gpuMemoryOverflowIndex[i * 2], constMemoryFlag, gpuMemoryOverflowIndex[i * 2 + 1]);
+					compress<<<1, BLOCK_SIZE>>>(d_inputFileData, d_compressedDataOffset, d_huffmanDictionary, d_byteCompressedData, gpuMemoryOverflowIndex[i * 2], constMemoryFlag, gpuMemoryOverflowIndex[i * 2 + 1]);
 					cudaError_t error_kernel = cudaGetLastError();
 					if (error_kernel != cudaSuccess)
 						printf("erro_final: %s\n", cudaGetErrorString(error_kernel));
