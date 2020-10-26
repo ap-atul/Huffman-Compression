@@ -134,7 +134,7 @@ void launchCudaHuffmanCompress(unsigned char * inputFileData,
                 printf("\nError Kernel 1 :: %s", cudaGetErrorString(error));
 
 			// copy compressed data from GPU to CPU memory
-			error = cudaMemcpy(inputFileData, device_inputFileData, ((compressedDataOffset[inputFileLength] / 8)) * sizeof(unsigned char), cudaMemcpyDeviceToHost);
+			error = cudaMemcpy(inputFileData, device_inputFileData, ((compressedDataOffset[inputFileLength] / 8)) * sizeof(unsigned char));
 			if(error != cudaSuccess)
                 printf("\nError 9 :: %s", cudaGetErrorString(error));
 
