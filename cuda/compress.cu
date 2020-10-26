@@ -69,7 +69,7 @@ int main(int argc, char ** argv){
     }
 
     // build the huffman tree
-    for(int i = 0; i < distinctCharacterCount; i++){
+    for(int i = 0; i < distinctCharacterCount - 1; i++){
         mergedHuffmanNodes = 2 * i;
         sortHuffmanTree(i, distinctCharacterCount, mergedHuffmanNodes);
         buildHuffmanTree(i, distinctCharacterCount, mergedHuffmanNodes);
