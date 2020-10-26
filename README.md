@@ -46,7 +46,7 @@ $ ./bin/compress input.txt input.compressed
 $ ./bin/decompress input.compressed input_decompressed.txt
 ```
 
-* For parallel with cuda
+### For parallel with cuda
 ```console
 $ make -B cuda
 ```
