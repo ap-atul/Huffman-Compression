@@ -9,6 +9,7 @@
 #include <limits.h>
 
 #include "../include/parallel.h"
+#include "../include/color.h"
 
 #define BLOCK_SIZE 1024
 #define MIN_SCRATCH_SIZE 50 * 1024 * 1024
@@ -99,7 +100,7 @@ int main(int argc, char ** argv){
     memData = inputFileLength + (inputFileLength + 1) * sizeof(unsigned int) + sizeof(huffmanDictionary);
 
     if(memFree - memData < MIN_SCRATCH_SIZE){
-        printf("\nExiting not enough memory on GPU :: \nMem Free :: %lu\nMin Required :: %lu\n", memFree, memData + MIN_SCRATCH_SIZE);
+        printf("\n%sExiting not enough memory on GPU :: \nMem Free :: %lu\nMin Required :: %lu\n", COLOR_ERROR, memFree, memData + MIN_SCRATCH_SIZE);
         return -1;
     }
 
@@ -108,7 +109,7 @@ int main(int argc, char ** argv){
     integerOverflowFlag = memRequired + 255 <= UINT_MAX || memOffset + 255 <= UINT_MAX ? 0 : 1;
 
     if(DEBUG){
-        printf("\n\tInput File Size :: %u\n\tOutput Size :: %lu\n\tNumber of Kernels :: %d\n\tInteger Overflow flag :: %d\n", inputFileLength, memOffset / 8, numberOfKernels, integerOverflowFlag);
+        printf("\n\t%sInput File Size :: %u\n\tOutput Size :: %lu\n\tNumber of Kernels :: %d\n\tInteger Overflow flag :: %d\n", COLOR_DEBUG, inputFileLength, memOffset / 8, numberOfKernels, integerOverflowFlag);
     }
 
     // generate offset data array
