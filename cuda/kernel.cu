@@ -28,7 +28,7 @@ __global__ void compress(unsigned char * device_inputFileData,
     // when shared memory is sufficient
     if(constMemoryFlag == 0){
         for(int i = pos; i < inputFileLength; i += blockDim.x){
-            for(int k = 0; k < table.bitSequenceLength[device_inputFileData[i]]; i++){
+            for(int k = 0; k < table.bitSequenceLength[device_inputFileData[i]]; k++){
                 device_byteCompressedData[device_compressedDataOffset[i] + k] = table.bitSequence[device_inputFileData[i]][k];
             }
         }
